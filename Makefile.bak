@@ -1,0 +1,4 @@
+clean:
+	rm a.out
+build:
+	g++ src/main.cpp src/lib/*/*.hpp -ljsoncpp -Iinc -Isrc/lib
