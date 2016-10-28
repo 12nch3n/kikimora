@@ -115,7 +115,7 @@ am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))
 am__v_at_0 = @
 am__v_at_1 = 
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
-depcomp = $(SHELL) $(top_srcdir)/depcomp
+depcomp = $(SHELL) $(top_srcdir)/tmp/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -157,14 +157,14 @@ am__define_uniq_tagged_files = \
   done | $(am__uniquify_input)`
 ETAGS = etags
 CTAGS = ctags
-am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp
+am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/tmp/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /Users/yinchen/Projects/kikimora/missing aclocal-1.15
+ACLOCAL = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing aclocal-1.15
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /Users/yinchen/Projects/kikimora/missing autoconf
-AUTOHEADER = ${SHELL} /Users/yinchen/Projects/kikimora/missing autoheader
-AUTOMAKE = ${SHELL} /Users/yinchen/Projects/kikimora/missing automake-1.15
+AUTOCONF = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing autoconf
+AUTOHEADER = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing autoheader
+AUTOMAKE = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing automake-1.15
 AWK = awk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -192,8 +192,8 @@ LDFLAGS =
 LIBOBJS = 
 LIBS = 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /Users/yinchen/Projects/kikimora/missing makeinfo
-MKDIR_P = .././install-sh -c -d
+MAKEINFO = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing makeinfo
+MKDIR_P = ../tmp/install-sh -c -d
 OBJEXT = o
 PACKAGE = kikimora
 PACKAGE_BUGREPORT = yinchen@freewheel.tv
@@ -231,7 +231,7 @@ host_alias =
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /Users/yinchen/Projects/kikimora/install-sh
+install_sh = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -254,7 +254,9 @@ top_srcdir = ..
 AUTOMAKE_OPTIONS = foreign
 kikimora_LDADD = -ljsoncpp
 kikimora_SOURCES = main.cpp
-AM_CPPFLAGS = -Ilib -I../inc
+AM_CPPFLAGS = -Ilib \
+			-I../inc
+
 all: all-am
 
 .SUFFIXES:

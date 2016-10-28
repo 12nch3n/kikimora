@@ -5,8 +5,8 @@ AC_PREREQ([2.69])
 AC_INIT([kikimora], [0.1.0], [yinchen@freewheel.tv])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_HEADERS(config.h)
+AC_CONFIG_AUX_DIR(tmp)
 AM_INIT_AUTOMAKE
-
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC

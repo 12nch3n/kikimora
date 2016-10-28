@@ -155,8 +155,10 @@ ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
-am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in compile \
-	depcomp install-sh missing
+am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
+	$(top_srcdir)/tmp/compile $(top_srcdir)/tmp/install-sh \
+	$(top_srcdir)/tmp/missing tmp/compile tmp/depcomp \
+	tmp/install-sh tmp/missing
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -199,12 +201,12 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /Users/yinchen/Projects/kikimora/missing aclocal-1.15
+ACLOCAL = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing aclocal-1.15
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /Users/yinchen/Projects/kikimora/missing autoconf
-AUTOHEADER = ${SHELL} /Users/yinchen/Projects/kikimora/missing autoheader
-AUTOMAKE = ${SHELL} /Users/yinchen/Projects/kikimora/missing automake-1.15
+AUTOCONF = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing autoconf
+AUTOHEADER = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing autoheader
+AUTOMAKE = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing automake-1.15
 AWK = awk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -232,8 +234,8 @@ LDFLAGS =
 LIBOBJS = 
 LIBS = 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /Users/yinchen/Projects/kikimora/missing makeinfo
-MKDIR_P = ./install-sh -c -d
+MAKEINFO = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing makeinfo
+MKDIR_P = tmp/install-sh -c -d
 OBJEXT = o
 PACKAGE = kikimora
 PACKAGE_BUGREPORT = yinchen@freewheel.tv
@@ -271,7 +273,7 @@ host_alias =
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /Users/yinchen/Projects/kikimora/install-sh
+install_sh = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
