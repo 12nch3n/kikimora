@@ -29,6 +29,4 @@ AC_CHECK_TYPES([ptrdiff_t])
 AC_CHECK_FUNCS([memset])
 
 AC_OUTPUT([Makefile
-		   src/Makefile
-		   src/lib/Makefile
-		   src/lib/kikimora/Makefile])
+		   src/Makefile])
