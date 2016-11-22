@@ -1,0 +1,39 @@
+<6.10>
+ADD	ads.conf	serer.info.id	test
+UPDATE	ads.conf	server.info.group	test
+DELETE  ads.conf	server.info.domain
+
+<6.11>
+ADD	ads.conf	serer.info.id	test
+UPDATE	ads.conf	server.info.group	test
+DELETE  ads.conf	server.info.domain
+
+<6.12>
+ADD	ads.conf	serer.info.id	test
+UPDATE	ads.conf	server.info.group	test
+DELETE  ads.conf	server.info.domain
+
+[regression]
+ADD	ads.conf	serer.info.id	test
+UPDATE	ads.conf	server.info.group	test
+DELETE  ads.conf	server.info.domain
+
+[integration]
+ADD	ads.conf	serer.info.id	test
+UPDATE	ads.conf	server.info.group	test
+DELETE  ads.conf	server.info.domain
+
+[performance]
+ADD	ads.conf	serer.info.id	test
+UPDATE	ads.conf	server.info.group	test
+DELETE  ads.conf	server.info.domain
+
+[staging]
+ADD	ads.conf	serer.info.id	test
+UPDATE	ads.conf	server.info.group	test
+DELETE  ads.conf	server.info.domain
+
+[production]
+ADD	ads.conf	serer.info.id	test
+UPDATE	ads.conf	server.info.group	test
+DELETE  ads.conf	server.info.domain
