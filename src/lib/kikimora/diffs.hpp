@@ -46,13 +46,13 @@ namespace kikimora{
         uint16_t PATCH;
         char* LABEL; // 8 charactor length;
         bool operator < (const Version& other) const {
-            return (MAJOR*10000+MINOR)*10000+PATCH < (other.MAJOR*10000+other.MINOR)*10000+other.PATCH;
+            return (MAJOR<<8+MINOR)<<8+PATCH < (other.MAJOR<<8+other.MINOR)<<8+other.PATCH;
         }
         bool operator > (const Version& other) const {
-            return (MAJOR*10000+MINOR)*10000+PATCH > (other.MAJOR*10000+other.MINOR)*10000+other.PATCH;
+            return (MAJOR<<8+MINOR)<<8+PATCH > (other.MAJOR<<8+other.MINOR)<<8+other.PATCH;
         }
         bool operator == (const Version& other) const {
-            return (MAJOR*10000+MINOR)*10000+PATCH == (other.MAJOR*10000+other.MINOR)*10000+other.PATCH;
+            return (MAJOR<<8+MINOR)<<8+PATCH == (other.MAJOR<<8+other.MINOR)<<8+other.PATCH;
         }
     } Version;
 
@@ -93,6 +93,36 @@ namespace kikimora{
         char* diff_node;
         /* diff_node: If operation is REPLACE, diff_node would be the keyword to replace. */
         char* node_content;
+        bool operator < (const Diff& other) const {
+            hash<string> h;
+            uint64_t weight = 0;
+            weight += (uint16_t)h(string(conf_file)+":"+string(diff_node))<<48;
+            weight += version->MAJOR<<32;
+            weight += version->MINOR<<16;
+            weight += version->PATCH;
+            uint64_t other_weight = 0;
+            other_weight += (uint16_t)h(string(other.conf_file)+":"+string(other.diff_node))<<48;
+            other_weight += other.version->MAJOR<<32;
+            other_weight += other.version->MINOR<<16;
+            other_weight += other.version->PATCH;
+            if (weight == other_weight) return rcd_no < other.rcd_no;
+            else return weight < other_weight;
+        }
+        bool operator > (const Diff& other) const {
+            hash<string> h;
+            uint64_t weight = 0;
+            weight += (uint16_t)h(string(conf_file)+":"+string(diff_node))<<48;
+            weight += version->MAJOR<<32;
+            weight += version->MINOR<<16;
+            weight += version->PATCH;
+            uint64_t other_weight = 0;
+            other_weight += (uint16_t)h(string(other.conf_file)+":"+string(other.diff_node))<<48;
+            other_weight += other.version->MAJOR<<32;
+            other_weight += other.version->MINOR<<16;
+            other_weight += other.version->PATCH;
+            if (weight == other_weight) return rcd_no > other.rcd_no;
+            else return weight > other_weight;
+        }
     } Diff;
 
     Diff* NewDiff(){
@@ -169,6 +199,7 @@ namespace kikimora{
             cout<<"diff_node:"<<(*diff)->diff_node<<"\t";
             cout<<"node_content:"<<(*diff)->node_content;
             cout<<endl;
+            cout<<(*diff<*diff_package.begin())<<(*diff>*diff_package.begin())<<endl;
         }
         return 0;
     }
