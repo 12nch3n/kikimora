@@ -3,15 +3,15 @@
  *
  *       Filename:  diffs.hpp
  *
- *    Description:  
+ *    Description: 
  *
  *        Version:  1.0
  *        Created:  10/30/2016 11:27:57
  *       Revision:  none
  *       Compiler:  gcc
  *
- *         Author:  YOUR NAME (), 
- *   Organization:  
+ *         Author:  YOUR NAME (),
+ *   Organization: 
  *
  * =====================================================================================
  */
@@ -19,10 +19,12 @@
 #ifndef DEFF_H
 #define DEFF_H
 #include <vector>
+#include <map>
 #include <string>
 #include <fstream>
 #include <iostream>
 #include <regex>
+#include <assert.h>
 
 #ifndef MAX_STR_LEN
 #define MAX_STR_LEN 1024
@@ -45,14 +47,8 @@ namespace kikimora{
         uint16_t MINOR;
         uint16_t PATCH;
         char* LABEL; // 8 charactor length;
-        bool operator < (const Version& other) const {
-            return (MAJOR<<8+MINOR)<<8+PATCH < (other.MAJOR<<8+other.MINOR)<<8+other.PATCH;
-        }
-        bool operator > (const Version& other) const {
-            return (MAJOR<<8+MINOR)<<8+PATCH > (other.MAJOR<<8+other.MINOR)<<8+other.PATCH;
-        }
-        bool operator == (const Version& other) const {
-            return (MAJOR<<8+MINOR)<<8+PATCH == (other.MAJOR<<8+other.MINOR)<<8+other.PATCH;
+        uint32_t Weight() const {
+            return ((uint32_t)MAJOR*1000+(uint32_t)MINOR)*1000+(uint32_t)PATCH;
         }
     } Version;
 
@@ -81,11 +77,14 @@ namespace kikimora{
                 memcpy(ret->LABEL, "default", LABEL_LEN*sizeof(char));
             }
         }
+        assert(ret->MAJOR<1000);
+        assert(ret->MINOR<1000);
+        assert(ret->PATCH<1000);
         return ret;
     }
 
     typedef struct Diff{
-        int rcd_no;
+        uint32_t rcd_no;
         OpType operation;
         char* conf_file;
         Version* version;
@@ -93,37 +92,17 @@ namespace kikimora{
         char* diff_node;
         /* diff_node: If operation is REPLACE, diff_node would be the keyword to replace. */
         char* node_content;
-        bool operator < (const Diff& other) const {
-            hash<string> h;
-            uint64_t weight = 0;
-            weight += (uint16_t)h(string(conf_file)+":"+string(diff_node))<<48;
-            weight += version->MAJOR<<32;
-            weight += version->MINOR<<16;
-            weight += version->PATCH;
-            uint64_t other_weight = 0;
-            other_weight += (uint16_t)h(string(other.conf_file)+":"+string(other.diff_node))<<48;
-            other_weight += other.version->MAJOR<<32;
-            other_weight += other.version->MINOR<<16;
-            other_weight += other.version->PATCH;
-            if (weight == other_weight) return rcd_no < other.rcd_no;
-            else return weight < other_weight;
+        uint32_t NodeHash() const {
+            hash<string> hash_fn;
+            return hash_fn(string(conf_file)+":"+string(diff_node));
         }
-        bool operator > (const Diff& other) const {
-            hash<string> h;
-            uint64_t weight = 0;
-            weight += (uint16_t)h(string(conf_file)+":"+string(diff_node))<<48;
-            weight += version->MAJOR<<32;
-            weight += version->MINOR<<16;
-            weight += version->PATCH;
-            uint64_t other_weight = 0;
-            other_weight += (uint16_t)h(string(other.conf_file)+":"+string(other.diff_node))<<48;
-            other_weight += other.version->MAJOR<<32;
-            other_weight += other.version->MINOR<<16;
-            other_weight += other.version->PATCH;
-            if (weight == other_weight) return rcd_no > other.rcd_no;
-            else return weight > other_weight;
+        uint64_t Weight() const {
+            uint64_t ret = 0;
+            ret = (uint64_t)version->Weight()<<32;
+            ret += (uint64_t)rcd_no;
+            return ret;
         }
-    } Diff;
+    }Diff;
 
     Diff* NewDiff(){
         Diff* ret=(Diff*)malloc(sizeof(Diff));
@@ -140,17 +119,15 @@ namespace kikimora{
             const char* diff_file;
             const char* base_conf_dir;
             vector<Diff*> diff_rcds;
-
             int LoadRcdline(const char* line, Diff* rcd);
         public:
             Diffs(const char* diff_file, const char* base_conf_dir);
-            /*  MergeMain: merge the all common diff by diff_point */
-            int Merge();
-            /*  Merge4Cate: Plus the diff records for the specified category.
+            int MergeCommon(const char* release_ver);
+            /*  PickDiffs4Cate: Plus the diff records for the common category.
              *  return cate_diff = common + category */
-            vector<Diff*> PlusDiff4Cate(const char* category);
+            vector<Diff*> PickDiffs4Cate(const char* release_ver, const char* category);
             /*  PrintRcds: Print the merged diff points. */
-            int PrintRcds(vector<Diff*> diff_package);
+            int PrintRcds();
     };
     Diffs::Diffs(\
             const char* diff_file, \
@@ -162,9 +139,9 @@ namespace kikimora{
             exit(EXIT_FAILURE);
         }
         string line;
-        int lineno=0;
+        uint32_t lineno=0;
         Diff* cate=NewDiff();
-        memcpy(cate->category,"base", MAX_STR_LEN*sizeof(char));
+        memcpy(cate->category,"common", MAX_STR_LEN*sizeof(char));
         while(getline(file_reader, line)){
             lineno++;
             if (line.length() <= 0) continue;
@@ -178,19 +155,44 @@ namespace kikimora{
                 cate=cur_rcd;
             }
         }
-        this->PrintRcds(this->diff_rcds);
     }
 
-    int Diffs::Merge(){
+    int Diffs::MergeCommon(const char* release_ver){
+        const Version* crn_ver = NewVersion(release_ver);
+        vector<Diff*>::iterator diff;
+        for(diff=this->diff_rcds.begin();diff!=this->diff_rcds.end();diff++){
+            if ( 0 == strcmp((*diff)->category, "common") ){
+                if ( crn_ver->Weight() > (*diff)->version->Weight()){
+                    memcpy((*diff)->version, crn_ver, sizeof(Version));
+                }
+            }
+        }
         return 0;
     }
-    vector<Diff*> Diffs::PlusDiff4Cate(const char* category){
-        vector<Diff*> diff_package;
-        return diff_package;
-    }
-    int Diffs::PrintRcds(vector<Diff*> diff_package){
+
+    vector<Diff*> Diffs::PickDiffs4Cate(const char* release_ver, const char* category){
+        const Version* crn_ver = NewVersion(release_ver);
+        vector<Diff*> ret;
         vector<Diff*>::iterator diff;
-        for (diff=diff_package.begin(); diff!=diff_package.end(); diff++){
+        for(diff=this->diff_rcds.begin();diff!=this->diff_rcds.end();diff++){
+            if ( 0 == strcmp((*diff)->category, "common") ){
+                if ( crn_ver->Weight() >= (*diff)->version->Weight()){
+                    ret.push_back(*diff);
+                } else {
+                    continue;
+                }
+            }else if ( 0 == strcmp((*diff)->category, category) ) {
+                ret.push_back(*diff);
+            }else {
+                continue;
+            }
+        }
+        return ret;
+    }
+
+    int Diffs::PrintRcds(){
+        vector<Diff*>::iterator diff;
+        for (diff=this->diff_rcds.begin(); diff!=this->diff_rcds.end(); diff++){
             cout<<"No:"<<(*diff)->rcd_no<<"\t";
             cout<<"Version:"<<(*diff)->version->MAJOR<<"."<<(*diff)->version->MINOR<<"\t";
             cout<<"Category:"<<(*diff)->category<<"\t";
@@ -199,7 +201,6 @@ namespace kikimora{
             cout<<"diff_node:"<<(*diff)->diff_node<<"\t";
             cout<<"node_content:"<<(*diff)->node_content;
             cout<<endl;
-            cout<<(*diff<*diff_package.begin())<<(*diff>*diff_package.begin())<<endl;
         }
         return 0;
     }
@@ -212,11 +213,11 @@ namespace kikimora{
         regex add_file_pattern ("(ACHIEVE)\\s+([^\\s]*?)\\s+(.*)");
         cmatch match;
         if ( regex_match(line, match, ver_pattern) ) {
-            memcpy(rcd->category,"base", MAX_STR_LEN*sizeof(char));
+            memcpy(rcd->category,"common", MAX_STR_LEN*sizeof(char));
             rcd->version=NewVersion(match[1].str().c_str());
             return 0;
         }else if ( regex_match(line, match, cate_pattern) ) {
-            rcd->version = NewVersion("65535.65535");
+            rcd->version = NewVersion("999.999");
             strcpy(rcd->category, match[1].str().c_str());
             return 1;
         }else if ( regex_match(line, match, node_pattern) ){
@@ -241,6 +242,33 @@ namespace kikimora{
         else{
             return -1;
         }
+    }
+
+    map<uint32_t, Diff*> SortAndGroupByDiffPoint(vector<Diff*> diffs){
+        map<uint32_t, Diff*> ret;
+        vector<Diff*>::iterator it;
+        for(it=diffs.begin(); it!=diffs.end();it++){
+            cout<<(*it)->Weight()<<endl;
+            uint32_t node_hash = (*it)->NodeHash();
+            if (ret.find(node_hash) == ret.end()){
+                ret[node_hash] = *it;
+            }else{
+                bool it_cate_flag = strcmp((*it)->category, "common");
+                bool pre_it_cate_flag = strcmp(ret[node_hash]->category, "common");
+                if ( (*it)->operation < ret[node_hash]->operation) {
+                    KK_LOG(KK_WARNING, "The Operation priority in line:<%d> is lower than line:<%d>, %d<%d.\n", \
+                            (*it)->rcd_no, ret[node_hash]->rcd_no, (*it)->operation, ret[node_hash]->operation);
+                }else if ( 0 == it_cate_flag && 1 == pre_it_cate_flag ) {
+                    KK_LOG(KK_NOTICE, "The Category priority in line:<%d> is lower than line:<%d>.\n", \
+                            (*it)->rcd_no, ret[node_hash]->rcd_no);
+                }else if ((*it)->Weight() > ret[node_hash]->Weight()) {
+                    ret[node_hash] = *it;
+                }
+                continue;
+            }
+        }
+        cout<<ret.size()<<endl;
+        return ret;
     }
 }
 #endif /* DEFF_H */
