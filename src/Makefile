@@ -254,7 +254,8 @@ top_srcdir = ..
 AUTOMAKE_OPTIONS = foreign
 kikimora_LDADD = -ljsoncpp
 kikimora_SOURCES = main.cpp
-AM_CPPFLAGS = -Ilib \
+AM_CPPFLAGS = -std=c++11 \
+			-Ilib \
 			-I../inc
 
 all: all-am

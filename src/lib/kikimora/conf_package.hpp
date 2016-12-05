@@ -20,6 +20,7 @@
 #include <vector>
 #include <string>
 #include <dirent.h>
+#include <kikimora/diffs.hpp>
 
 namespace kikimora{
     using namespace std;
@@ -62,6 +63,21 @@ namespace kikimora{
         }while(true);
         return 0;
     }
+
+    template<class CONF_TYPE> class DiffPatcher{
+        public:
+            int UpdateConf(const CONF_TYPE* conf_file, vector<Diff*> diffs);
+            int SaveTofile(const CONF_TYPE* conf_file, const char* save_to_dest);
+    };
+
+    template<class CONF_TYPE>
+        int UpdateConf(const CONF_TYPE* conf_file, vector<Diff*> diffs){
+            return 0;
+        }
+    template<class CONF_TYPE>
+        int SaveTofile(const CONF_TYPE* conf_file, const char* save_to_dest){
+            return 0;
+        }
 
 } // namespace kikmora
 #endif /* CONF_PACKAGE_HPP */

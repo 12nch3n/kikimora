@@ -1,3 +1,16 @@
+#define KK_NOTICE 0
+#define KK_WARNING 1
+#define KK_ERROR 2
+#define KK_LOG(LEVEL, fmt, ...)\
+        do {\
+                if (KK_NOTICE == LEVEL)\
+                    fprintf(stdout, "NOTICE:[%s]:[%d]:" fmt, __FILE__, __LINE__ , ##__VA_ARGS__);\
+                else if (KK_WARNING == LEVEL)\
+                    fprintf(stdout, "WARNING:[%s]:[%d]:" fmt, __FILE__, __LINE__ , ##__VA_ARGS__);\
+                else if (KK_ERROR == LEVEL)\
+                    fprintf(stdout, "ERROR:[%s]:[%d]:" fmt, __FILE__, __LINE__ , ##__VA_ARGS__);\
+            } while(0)
+
 #include <json/json.h>
 #include <iostream>
 #include <kikimora/conf_package.hpp>
@@ -21,7 +34,7 @@ int main()
     cp.ScanSrcFiles(&file_list);
     vector<string>::iterator v = file_list.begin();
     while (v != file_list.end()) {
-        cout << *v << endl; 
+        cout << *v << endl;
         v++;
     }
     return 0;
