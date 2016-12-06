@@ -64,19 +64,34 @@ namespace kikimora{
         return 0;
     }
 
-    template<class CONF_TYPE> class DiffPatcher{
-        public:
-            int UpdateConf(const CONF_TYPE* conf_file, vector<Diff*> diffs);
-            int SaveTofile(const CONF_TYPE* conf_file, const char* save_to_dest);
-    };
-
-    template<class CONF_TYPE>
-        int UpdateConf(const CONF_TYPE* conf_file, vector<Diff*> diffs){
+    template<typename CONF_TYPE>
+        int PatchDiffs(const CONF_TYPE* conf_file, vector<Diff*> diffs){
+            vector<Diff*>::iterator it = diffs.begin();
+            for(;it!=diffs.end();it++){
+                switch ((*it)->operation){
+                    case OpType::ACHIEVE: {
+                        cout<<"Conf file archive would supported in the further version."<<endl;
+                        break; }
+                    case OpType::ADD: {
+                        conf_file->add((*it)->diff_node, (*it)->node_content);
+                        break; }
+                    case OpType::UPDATE: {
+                        conf_file->update((*it)->diff_node, (*it)->node_content);
+                        break;}
+                    case OpType::REPLACE: {
+                        conf_file->replace((*it)->diff_node, (*it)->node_content);
+                        break;}
+                    case OpType::DELETE: {
+                        conf_file->drop((*it)->diff_node);
+                        break;}
+                    default:  break;
+                }
+            }
             return 0;
         }
-    template<class CONF_TYPE>
+    template<typename CONF_TYPE>
         int SaveTofile(const CONF_TYPE* conf_file, const char* save_to_dest){
-            return 0;
+            return conf_file->Save(save_to_dest);
         }
 
 } // namespace kikmora

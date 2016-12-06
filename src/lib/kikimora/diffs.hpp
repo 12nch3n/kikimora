@@ -58,7 +58,7 @@ namespace kikimora{
         regex version_pattern("(\\d+)\\.(\\d+)\\.(\\d+)\\-(.{1,8})|(\\d+)\\.(\\d+)\\.(\\d+)|(\\d+)\\.(\\d+)");
         cmatch match;
         if ( regex_match(version_str, match, version_pattern) ) {
-            unsigned index=1;
+            int index=1;
             for ( ; index<match.size();index++ ){
                 if ( !match[index].str().empty()) break;
             }
@@ -288,6 +288,49 @@ namespace kikimora{
             uint32_t fname_hash = (uint32_t)hash_fn(it->second->conf_file);
             if(ret.end() == ret.find(fname_hash)) ret[fname_hash]=vector<Diff*>();
             ret[fname_hash].push_back(it->second);
+        }
+        return ret;
+    }
+
+    typedef struct KxNode{
+        char* name;
+        int index;
+    }KxNode;
+
+    typedef vector<KxNode*> KxPath;
+
+    KxNode* NewKxNode(const char* name, int index=-1){
+        KxNode* ret = (KxNode*)malloc(sizeof(KxNode));
+        ret->name = (char*)malloc(MAX_STR_LEN/16*sizeof(char));
+        strcpy(ret->name, name);
+        ret->index = index;
+        return ret;
+    }
+
+    KxPath KxpathParse(const char* node_path, const string pattern="."){
+        regex node_pattern("(\\w+)\\[(\\d+)\\]|(\\w+)");
+        string::size_type pos;
+        vector<KxNode*> ret;
+        string path_str(node_path);
+        path_str += pattern;
+        int size = path_str.size();
+        for(int i=0; i<size; i++){
+            pos = path_str.find(pattern,i);
+            if (pos < size){
+                string node_str = path_str.substr(i, pos-i);
+                smatch match;
+                KxNode* kxnode;
+                if ( regex_match(node_str, match, node_pattern) ) {
+                    if ( ! match[1].str().empty()) {
+                        kxnode = NewKxNode(match[1].str().c_str(), \
+                            atoi(match[2].str().c_str()));
+                    }else{
+                        kxnode = NewKxNode(match[3].str().c_str());
+                    }
+                    ret.push_back(kxnode);
+                    i=pos+pattern.size()-1;
+                }
+            }
         }
         return ret;
     }

@@ -46,6 +46,11 @@ int main()
         cout<<"FILE:"<<it->first<<endl;
         for(vector<Diff*>::iterator i=it->second.begin(); i!=it->second.end();i++){
             cout<<(*i)->diff_node<<"\t"<<(*i)->node_content<<endl;
+            KxPath path = KxpathParse((*i)->diff_node);
+            for(KxPath::iterator pt=path.begin(); pt!=path.end();pt++){
+                cout<<(*pt)->name<<"["<<(*pt)->index<<"]\t";
+            }
+            cout<<endl;
         }
     }
     return 0;
