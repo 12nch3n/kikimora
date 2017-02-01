@@ -16,7 +16,7 @@
  * =====================================================================================
  */
 
-#include <json.h>
+#include <json/json.h>
 #include <string>
 #include <kikimora/diffs.hpp>
 
@@ -27,14 +27,14 @@ namespace kikimora {
         private:
             string content;
         public:
+            KmrJsonConf(const char* content);
             int add(const char* node_path, const char* node_content);
             int update(const char* node_path, const char* node_content);
             int replace(const char* pattern, const char* content);
-            int drop(const char* node_path);
-    }
-    KmrJsonConf::KmrJsonConf(const char* content){
-
-    }
+            int drop(const char* node_path, const char* content);
+            int save(const char* node_path);
+    };
+    KmrJsonConf::KmrJsonConf(const char* content){}
 
 
     int KmrJsonConf::add(const char* node_path, const char* node_content){

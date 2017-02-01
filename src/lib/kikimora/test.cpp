@@ -30,7 +30,8 @@
 
 #include <stdlib.h>
 #include <string>
-#include <diffs.hpp>
+#include <kikimora/diffs.hpp>
+#include <kikimora/json_conf.hpp>
 using namespace kikimora;
 int main()
 {
