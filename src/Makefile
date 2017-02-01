@@ -99,7 +99,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_kikimora_OBJECTS = main.$(OBJEXT)
+am__dirstamp = $(am__leading_dot)dirstamp
+am_kikimora_OBJECTS = main.$(OBJEXT) lib/json/jsoncpp.$(OBJEXT)
 kikimora_OBJECTS = $(am_kikimora_OBJECTS)
 kikimora_DEPENDENCIES =
 AM_V_P = $(am__v_P_$(V))
@@ -253,7 +254,9 @@ top_builddir = ..
 top_srcdir = ..
 AUTOMAKE_OPTIONS = foreign
 kikimora_LDADD = -ljsoncpp
-kikimora_SOURCES = main.cpp
+kikimora_SOURCES = main.cpp \
+				 lib/json/jsoncpp.cpp
+
 AM_CPPFLAGS = -std=c++11 \
 			-Ilib \
 			-I../inc
@@ -333,6 +336,14 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+lib/json/$(am__dirstamp):
+	@$(MKDIR_P) lib/json
+	@: > lib/json/$(am__dirstamp)
+lib/json/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) lib/json/$(DEPDIR)
+	@: > lib/json/$(DEPDIR)/$(am__dirstamp)
+lib/json/jsoncpp.$(OBJEXT): lib/json/$(am__dirstamp) \
+	lib/json/$(DEPDIR)/$(am__dirstamp)
 
 kikimora$(EXEEXT): $(kikimora_OBJECTS) $(kikimora_DEPENDENCIES) $(EXTRA_kikimora_DEPENDENCIES) 
 	@rm -f kikimora$(EXEEXT)
@@ -340,22 +351,26 @@ kikimora$(EXEEXT): $(kikimora_OBJECTS) $(kikimora_DEPENDENCIES) $(EXTRA_kikimora
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f lib/json/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/main.Po
+include lib/json/$(DEPDIR)/jsoncpp.Po
 
 .cpp.o:
-	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+	$(am__mv) $$depbase.Tpo $$depbase.Po
 #	$(AM_V_CXX)source='$<' object='$@' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ $<
 
 .cpp.obj:
-	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
+	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
+	$(am__mv) $$depbase.Tpo $$depbase.Po
 #	$(AM_V_CXX)source='$<' object='$@' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
@@ -475,6 +490,8 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f lib/json/$(DEPDIR)/$(am__dirstamp)
+	-rm -f lib/json/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -484,7 +501,7 @@ clean: clean-am
 clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR)
+	-rm -rf ./$(DEPDIR) lib/json/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -530,7 +547,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR)
+	-rm -rf ./$(DEPDIR) lib/json/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

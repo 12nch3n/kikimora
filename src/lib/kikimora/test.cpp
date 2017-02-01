@@ -38,7 +38,7 @@ int main()
     string base_conf_dir="/";
     Diffs diffs(diff_file.c_str(), base_conf_dir.c_str());
     diffs.MergeCommon("6.11");
-    vector<Diff*> x=diffs.PickDiffs4Cate("6.11", "staging");
+    vector<Diff*> x=diffs.PickDiffs4Cate("6.13", "staging");
     map<uint32_t, Diff*> y = UniqByDiffPoint(x);
     map< uint32_t, vector<Diff*> > z = GroupByFile(y);
     cout<<z.size()<<endl;

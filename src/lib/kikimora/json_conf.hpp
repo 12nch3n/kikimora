@@ -18,12 +18,13 @@
 
 #include <json.h>
 #include <string>
+#include <kikimora/diffs.hpp>
+
 using namespace std;
 
 namespace kikimora {
     class KmrJsonConf{
         private:
-            const char* src_fname;
             string content;
         public:
             int add(const char* node_path, const char* node_content);
@@ -31,8 +32,13 @@ namespace kikimora {
             int replace(const char* pattern, const char* content);
             int drop(const char* node_path);
     }
+    KmrJsonConf::KmrJsonConf(const char* content){
+
+    }
+
 
     int KmrJsonConf::add(const char* node_path, const char* node_content){
+        KxPath xpath = KxpathParse(node_path);
         return 0;
     }
     int KmrJsonConf::update(const char* node_path, const char* node_content){
@@ -48,3 +54,4 @@ namespace kikimora {
         return 0;
     }
 } // end of namespace kikimora
+

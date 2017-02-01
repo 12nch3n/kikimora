@@ -20,6 +20,7 @@
 #include <vector>
 #include <string>
 #include <dirent.h>
+#include <fstream>
 #include <kikimora/diffs.hpp>
 
 namespace kikimora{

@@ -16,8 +16,8 @@
  * =====================================================================================
  */
 
-#ifndef DEFF_H
-#define DEFF_H
+#ifndef DIFFS_H
+#define DIFFS_H
 #include <vector>
 #include <map>
 #include <string>
@@ -335,4 +335,4 @@ namespace kikimora{
         return ret;
     }
 }
-#endif /* DEFF_H */
+#endif /* DIFFS_H */
