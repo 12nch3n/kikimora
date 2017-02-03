@@ -32,6 +32,7 @@
 #include <string>
 #include <kikimora/diffs.hpp>
 #include <kikimora/json_conf.hpp>
+
 using namespace kikimora;
 int main()
 {
@@ -48,11 +49,30 @@ int main()
         for(vector<Diff*>::iterator i=it->second.begin(); i!=it->second.end();i++){
             cout<<(*i)->diff_node<<"\t"<<(*i)->node_content<<endl;
             KxPath path = KxpathParse((*i)->diff_node);
-            for(KxPath::iterator pt=path.begin(); pt!=path.end();pt++){
-                cout<<(*pt)->name<<"["<<(*pt)->index<<"]\t";
-            }
-            cout<<endl;
+            KxNode last_node(-1);
+            KxPath parent_path = KxParent(path, last_node);
+            cout << "PATH:\t" << KxPathString(path) << endl;
+            cout << "PARENT:\t" << KxPathString(parent_path) << endl;
+            cout << last_node.index_str() << endl;
         }
     }
+    //Json::Reader reader;
+    //Json::Value root;
+    //reader.parse("{\"a\":{\"b\":[1,2,3]}}", root);
+    //Json::Value* p = &(root["a"]);
+    //Json::Path path("a.c");
+    //try{
+    //    path.make(root) = Json::Value("12345");
+    //} catch  (exception& e) {
+    //    cout << e.what() << endl;
+    //    exit(1);
+    //}
+    //cout << root << endl;
+    KmrJsonConf kjc("{\"a\":{\"b\":[1,2,3]}}");
+    kjc.add("a.c", "\"1234\"");
+    kjc.update("a.b[0]", "4");
+    kjc.save("test");
+    kjc.drop("a.b[2]");
+    kjc.save("test");
     return 0;
 }

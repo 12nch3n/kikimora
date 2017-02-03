@@ -292,19 +292,50 @@ namespace kikimora{
         return ret;
     }
 
-    typedef struct KxNode{
-        char* name;
-        int index;
-    }KxNode;
-
+    class KxNode;
     typedef vector<KxNode*> KxPath;
 
-    KxNode* NewKxNode(const char* name, int index=-1){
-        KxNode* ret = (KxNode*)malloc(sizeof(KxNode));
-        ret->name = (char*)malloc(MAX_STR_LEN/16*sizeof(char));
-        strcpy(ret->name, name);
-        ret->index = index;
-        return ret;
+    class KxNode{
+        public:
+            string _name;
+            int _index;
+            KxNode(const char* name);
+            KxNode(int index);
+            string index_str();
+    };
+
+    KxNode::KxNode(const char* name) : _name(name), _index(-1) {}
+    KxNode::KxNode(int index) : _name(), _index(index) {}
+
+    string KxNode::index_str(){
+        if ( !this->_name.empty() ) {
+            return this->_name;
+        } else {
+            char ret[10] = "";
+            sprintf(ret, "[%d]", this->_index);
+            return string(ret);
+        }
+    }
+
+    string KxPathString(KxPath path){
+        //string path_str = (*path.begin())->index_str();
+        string path_str = "";
+        for(KxPath::iterator pt=path.begin(); pt!=path.end(); pt++){
+            if ( !(*pt)->_name.empty()){
+                path_str += '.' + (*pt)->_name;
+            } else {
+                char ret[10] = "";
+                sprintf(ret, "[%d]", (*pt)->_index);
+                path_str += string(ret);
+            }
+        }
+        return path_str;
+    }
+
+    KxPath KxParent(KxPath path, KxNode& last_index){
+        last_index = *(path.back());
+        path.pop_back();
+        return path;
     }
 
     KxPath KxpathParse(const char* node_path, const string pattern="."){
@@ -319,15 +350,19 @@ namespace kikimora{
             if (pos < size){
                 string node_str = path_str.substr(i, pos-i);
                 smatch match;
-                KxNode* kxnode;
                 if ( regex_match(node_str, match, node_pattern) ) {
                     if ( ! match[1].str().empty()) {
-                        kxnode = NewKxNode(match[1].str().c_str(), \
-                            atoi(match[2].str().c_str()));
+                        KxNode* kxnode1 = (KxNode*)malloc(sizeof(KxNode));
+                        KxNode* kxnode2 = (KxNode*)malloc(sizeof(KxNode));
+                        *kxnode1 = KxNode(match[1].str().c_str());
+                        *kxnode2 = KxNode(atoi(match[2].str().c_str()));
+                        ret.push_back(kxnode1);
+                        ret.push_back(kxnode2);
                     }else{
-                        kxnode = NewKxNode(match[3].str().c_str());
+                        KxNode* kxnode = (KxNode*)malloc(sizeof(KxNode));
+                        *kxnode = KxNode(match[3].str().c_str());
+                        ret.push_back(kxnode);
                     }
-                    ret.push_back(kxnode);
                     i=pos+pattern.size()-1;
                 }
             }
