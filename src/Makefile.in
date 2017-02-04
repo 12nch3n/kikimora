@@ -100,7 +100,8 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_kikimora_OBJECTS = main.$(OBJEXT) lib/json/jsoncpp.$(OBJEXT)
+am_kikimora_OBJECTS = kikimora.$(OBJEXT) lib/json/jsoncpp.$(OBJEXT) \
+	lib/docopt/docopt.$(OBJEXT)
 kikimora_OBJECTS = $(am_kikimora_OBJECTS)
 kikimora_DEPENDENCIES =
 AM_V_P = $(am__v_P_@AM_V@)
@@ -254,8 +255,9 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
 kikimora_LDADD = -ljsoncpp
-kikimora_SOURCES = main.cpp \
-				 lib/json/jsoncpp.cpp
+kikimora_SOURCES = kikimora.cpp \
+				 lib/json/jsoncpp.cpp \
+				 lib/docopt/docopt.cpp
 
 AM_CPPFLAGS = -std=c++11 \
 			-Ilib
@@ -343,6 +345,14 @@ lib/json/$(DEPDIR)/$(am__dirstamp):
 	@: > lib/json/$(DEPDIR)/$(am__dirstamp)
 lib/json/jsoncpp.$(OBJEXT): lib/json/$(am__dirstamp) \
 	lib/json/$(DEPDIR)/$(am__dirstamp)
+lib/docopt/$(am__dirstamp):
+	@$(MKDIR_P) lib/docopt
+	@: > lib/docopt/$(am__dirstamp)
+lib/docopt/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) lib/docopt/$(DEPDIR)
+	@: > lib/docopt/$(DEPDIR)/$(am__dirstamp)
+lib/docopt/docopt.$(OBJEXT): lib/docopt/$(am__dirstamp) \
+	lib/docopt/$(DEPDIR)/$(am__dirstamp)
 
 kikimora$(EXEEXT): $(kikimora_OBJECTS) $(kikimora_DEPENDENCIES) $(EXTRA_kikimora_DEPENDENCIES) 
 	@rm -f kikimora$(EXEEXT)
@@ -350,12 +360,14 @@ kikimora$(EXEEXT): $(kikimora_OBJECTS) $(kikimora_DEPENDENCIES) $(EXTRA_kikimora
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f lib/docopt/*.$(OBJEXT)
 	-rm -f lib/json/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/kikimora.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@lib/docopt/$(DEPDIR)/docopt.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@lib/json/$(DEPDIR)/jsoncpp.Po@am__quote@
 
 .cpp.o:
@@ -489,6 +501,8 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f lib/docopt/$(DEPDIR)/$(am__dirstamp)
+	-rm -f lib/docopt/$(am__dirstamp)
 	-rm -f lib/json/$(DEPDIR)/$(am__dirstamp)
 	-rm -f lib/json/$(am__dirstamp)
 
@@ -500,7 +514,7 @@ clean: clean-am
 clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR) lib/json/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) lib/docopt/$(DEPDIR) lib/json/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -546,7 +560,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR) lib/json/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) lib/docopt/$(DEPDIR) lib/json/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

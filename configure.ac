@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([kikimora], [0.1.0], [yinchen@freewheel.tv])
-AC_CONFIG_SRCDIR([src/main.cpp])
+AC_CONFIG_SRCDIR([src/kikimora.cpp])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_AUX_DIR(tmp)
 AM_INIT_AUTOMAKE([subdir-objects])
@@ -12,7 +12,7 @@ AC_PROG_CXX
 AC_PROG_CC
 
 # Checks for libraries.
-AC_CHECK_LIB([pthread],[jsoncpp])
+AC_CHECK_LIB([pthread])
 AC_PROG_RANLIB
 # Checks for header files.
 AC_CHECK_HEADERS([stddef.h stdint.h stdlib.h])
