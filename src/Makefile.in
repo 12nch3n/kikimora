@@ -258,8 +258,7 @@ kikimora_SOURCES = main.cpp \
 				 lib/json/jsoncpp.cpp
 
 AM_CPPFLAGS = -std=c++11 \
-			-Ilib \
-			-I../inc
+			-Ilib
 
 all: all-am
 
