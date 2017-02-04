@@ -161,8 +161,8 @@ namespace kikimora{
 
     int Diffs::MergeCommon(const char* release_ver){
         const Version* crn_ver = NewVersion(release_ver);
-        vector<Diff*>::iterator diff;
-        for(diff=this->diff_rcds.begin();diff!=this->diff_rcds.end();diff++){
+        //vector<Diff*>::iterator diff;
+        for(auto diff=this->diff_rcds.begin(); diff!=this->diff_rcds.end(); diff++){
             if ( 0 == strcmp((*diff)->category, "common") ){
                 if ( crn_ver->Weight() > (*diff)->version->Weight()){
                     memcpy((*diff)->version, crn_ver, sizeof(Version));
@@ -177,8 +177,8 @@ namespace kikimora{
             const char* feature = ""){
         const Version* crn_ver = NewVersion(release_ver);
         vector<Diff*> ret;
-        vector<Diff*>::iterator diff;
-        for(diff=this->diff_rcds.begin();diff!=this->diff_rcds.end();diff++){
+        //vector<Diff*>::iterator diff;
+        for(auto diff=this->diff_rcds.begin(); diff!=this->diff_rcds.end(); diff++){
             if ( 0 == strcmp((*diff)->category, "common") ){
                 if ( (*diff)->version->Weight() <= crn_ver->Weight() && \
                         ( 0 == strcmp((*diff)->version->FEATURE, "") || \
@@ -197,8 +197,8 @@ namespace kikimora{
     }
 
     int Diffs::PrintRcds(){
-        vector<Diff*>::iterator diff;
-        for (diff=this->diff_rcds.begin(); diff!=this->diff_rcds.end(); diff++){
+        //vector<Diff*>::iterator diff;
+        for (auto diff=this->diff_rcds.begin(); diff!=this->diff_rcds.end(); diff++){
             cout<<"No:"<<(*diff)->rcd_no<<"\t";
             cout<<"Version:"<<(*diff)->version->MAJOR<<"."<<\
                 (*diff)->version->MINOR<<"."<<\
@@ -254,8 +254,8 @@ namespace kikimora{
 
     map<uint32_t, Diff*> UniqByDiffPoint(vector<Diff*> diffs){
         map<uint32_t, Diff*> ret;
-        vector<Diff*>::iterator it;
-        for(it=diffs.begin(); it!=diffs.end();it++){
+        //vector<Diff*>::iterator it;
+        for(auto it=diffs.begin(); it!=diffs.end();it++){
             uint32_t node_hash = (*it)->NodeHash();
             if (ret.find(node_hash) == ret.end()){
                 ret[node_hash] = *it;
@@ -283,7 +283,7 @@ namespace kikimora{
     map< uint32_t, vector<Diff*> > GroupByFile(map<uint32_t, Diff*> uniq_diffs){
         map< uint32_t, vector<Diff*> > ret;
         hash<string> hash_fn;
-        for( map<uint32_t, Diff*>::iterator it = uniq_diffs.begin(); \
+        for(auto it = uniq_diffs.begin(); \
                 it!=uniq_diffs.end(); it++ ) {
             uint32_t fname_hash = (uint32_t)hash_fn(it->second->conf_file);
             if(ret.end() == ret.find(fname_hash)) ret[fname_hash]=vector<Diff*>();
@@ -320,7 +320,7 @@ namespace kikimora{
     string KxPathString(KxPath path){
         //string path_str = (*path.begin())->index_str();
         string path_str = "";
-        for(KxPath::iterator pt=path.begin(); pt!=path.end(); pt++){
+        for(auto pt=path.begin(); pt!=path.end(); pt++){
             if ( !(*pt)->_name.empty()){
                 path_str += '.' + (*pt)->_name;
             } else {

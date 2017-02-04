@@ -96,8 +96,6 @@ namespace kikimora {
         Json::Path parent(KxPathString(parent_path));
         try{
             Json::Value parent_cp = parent.resolve(this->root);
-            cout << KxPathString(parent_path) << endl;
-            cout << parent_cp << endl;
             if ( !last_node._name.empty() && \
                parent_cp.isObject()) {
                parent.make(this->root).removeMember(last_node.index_str());
@@ -115,6 +113,9 @@ namespace kikimora {
                         node_path);
                 exit(1);
             }
+            KK_LOG(KK_NOTICE,\
+                   "Drop the json key in path %s.",
+                   node_path);
         } catch (exception& e) {
             KK_LOG(KK_ERROR, \
                     "Could not delete the node at %s, error message: %s", \
