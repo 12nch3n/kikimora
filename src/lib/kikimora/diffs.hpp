@@ -251,13 +251,11 @@ namespace kikimora{
         if ( regex_match(line, match, ver_pattern) ) {
             memcpy(rcd->category, "common", MAX_STR_LEN*sizeof(char));
             rcd->version=NewVersion(match[1].str().c_str());
-            cout << match[1].str().c_str() << endl;
             strcpy(rcd->tag, match[0].str().c_str());
             return 0;
         }else if ( regex_match(line, match, cate_pattern) ) {
             rcd->version = NewVersion("999.999.999");
             strcpy(rcd->category, match[1].str().c_str());
-            cout << match[1].str().c_str() << endl;
             strcpy(rcd->tag, match[0].str().c_str());
             return 1;
         }else if ( regex_match(line, match, node_pattern) ){
@@ -358,9 +356,11 @@ namespace kikimora{
                 uniqed_diffs.push_back(it->second);
             }
         }
-        sort(uniqed_diffs.begin(), uniqed_diffs.end(), \
-                [] (Diff* const& a, Diff* const& b) { \
-                    return a->Weight() < b->Weight();} );
+        sort(uniqed_diffs.begin(), \
+                uniqed_diffs.end(), \
+                [](Diff* const& a, Diff* const& b){ \
+                    return a->Weight() < b->Weight(); \
+                } );
         diffs.PrintRcds(uniqed_diffs);
         return 0;
     }

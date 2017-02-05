@@ -1,3 +1,17 @@
+#define KK_NOTICE 0
+#define KK_WARNING 1
+#define KK_ERROR 2
+#define KK_LOG(LEVEL, fmt, ...)\
+        do {\
+                if (KK_NOTICE == LEVEL)\
+                    fprintf(stdout, "NOTICE:[%s]:[%d]:" fmt, __FILE__, __LINE__ , ##__VA_ARGS__);\
+                else if (KK_WARNING == LEVEL)\
+                    fprintf(stdout, "WARNING:[%s]:[%d]:" fmt, __FILE__, __LINE__ , ##__VA_ARGS__);\
+                else if (KK_ERROR == LEVEL)\
+                    fprintf(stdout, "ERROR:[%s]:[%d]:" fmt, __FILE__, __LINE__ , ##__VA_ARGS__);\
+            } while(0)
+
+#include "lib/kikimora/diffs.hpp"
 #include "docopt/docopt.h"
 #include <iostream>
 
@@ -11,12 +25,13 @@ R"(Kikmora commands:
                      The conf diffs in the same tag would be patched as line number ascends.
 
     Usage:
-      kikimora diff merge <release> [ --diff=<df>|--new-diff=<ndf> ]
+      kikimora diff merge <release> [--diff=<df>]
       kikimora conf generate <release> <feature> <stage> [--diff=<df>]
 
     Options:
       -h --help     Show this screen.
       --version     Show version.
+      --diff=<df>   The diff file path [default: conf.diff].
       <release>     The release version like 0.0.0, reference to http://semver.org/.
       <feature>     The feature diffs need covered on <release>.
       <stage>       The stage diffs need covered on <release> + <feature>.
@@ -29,9 +44,10 @@ int main(int argc, const char** argv)
                                                   true,               // show help if requested
                                                   "Kikimora 0.1");  // version string
 
-    for(auto const& arg : args) {
-        std::cout << arg.first << ": " << arg.second << std::endl;
+    if (args["diff"].asBool() && args["merge"].asBool()) {
+        std::string release = args["<release>"].asString();
+        std::string diff_file = args["--diff"].asString();
+        kikimora::DiffsMerge(release.c_str(), diff_file.c_str());
     }
-
     return 0;
 }
