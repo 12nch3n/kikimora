@@ -90,6 +90,7 @@ namespace kikimora{
             }
             return 0;
         }
+
     template<typename CONF_TYPE>
         int SaveTofile(const CONF_TYPE* conf_file, const char* save_to_dest){
             return conf_file->save(save_to_dest);

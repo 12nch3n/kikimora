@@ -109,16 +109,16 @@ namespace kikimora {
                 parent.make(this->root) = new_arr;
             } else {
                 KK_LOG(KK_ERROR, \
-                        "Could not delete the node at %s", \
+                        "Could not delete the node at %s.\n", \
                         node_path);
                 exit(1);
             }
             KK_LOG(KK_NOTICE,\
-                   "Drop the json key in path %s.",
+                   "Drop the json key in path %s.\n",
                    node_path);
         } catch (exception& e) {
             KK_LOG(KK_ERROR, \
-                    "Could not delete the node at %s, error message: %s", \
+                    "Could not delete the node at %s, error message: %s.\n", \
                     node_path, e.what());
             exit(1);
         }

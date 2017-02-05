@@ -38,24 +38,19 @@ int main()
 {
     string diff_file="test.diff";
     string base_conf_dir="/";
-    Diffs diffs(diff_file.c_str(), base_conf_dir.c_str());
-    diffs.MergeCommon("6.11");
-    vector<Diff*> x=diffs.PickDiffs4Cate("6.13", "staging");
-    map<uint32_t, Diff*> y = UniqByDiffPoint(x);
-    map< uint32_t, vector<Diff*> > z = GroupByFile(y);
-    cout<<z.size()<<endl;
-    for(map< uint32_t, vector<Diff*> >::iterator it=z.begin(); it !=z.end(); it++){
-        cout<<"FILE:"<<it->first<<endl;
-        for(vector<Diff*>::iterator i=it->second.begin(); i!=it->second.end();i++){
-            cout<<(*i)->diff_node<<"\t"<<(*i)->node_content<<endl;
-            KxPath path = KxpathParse((*i)->diff_node);
-            KxNode last_node(-1);
-            KxPath parent_path = KxParent(path, last_node);
-            cout << "PATH:\t" << KxPathString(path) << endl;
-            cout << "PARENT:\t" << KxPathString(parent_path) << endl;
-            cout << last_node.index_str() << endl;
-        }
-    }
+    DiffsMerge("6.12", "test.diff");
+    //Diffs diffs(diff_file.c_str());
+    //diffs.MergeCommon("6.11");
+    //vector<Diff*> x=diffs.PickDiffs4Cate("6.13", "staging");
+    //map<uint32_t, Diff*> y = UniqByDiffPoint(x);
+    //map< uint32_t, vector<Diff*> > z = GroupByTag(y);
+    //cout<<z.size()<<endl;
+    //for(map< uint32_t, vector<Diff*> >::iterator it=z.begin(); it !=z.end(); it++){
+    //    cout<<"FILE:"<<it->first<<endl;
+    //    for(vector<Diff*>::iterator i=it->second.begin(); i!=it->second.end();i++){
+    //        cout << (*i)->Line() << endl;
+    //    }
+    //}
     //Json::Reader reader;
     //Json::Value root;
     //reader.parse("{\"a\":{\"b\":[1,2,3]}}", root);

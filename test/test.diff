@@ -4,7 +4,7 @@ UPDATE	ads.conf	server.info.group	test
 DELETE  ads.conf	server.info.domain
 
 <6.11>
-ADD	ads.conf	server.info.id	test
+ADD	ads.conf	server.info.id1	test
 UPDATE	ads.conf	server.info.group	test
 DELETE  ads.conf	server.info.domain
 
