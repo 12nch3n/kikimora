@@ -11,7 +11,7 @@
                     fprintf(stdout, "ERROR:[%s]:[%d]:" fmt, __FILE__, __LINE__ , ##__VA_ARGS__);\
             } while(0)
 
-#include "lib/kikimora/diffs.hpp"
+#include "kikimora/diffs.hpp"
 #include "docopt/docopt.h"
 #include <iostream>
 

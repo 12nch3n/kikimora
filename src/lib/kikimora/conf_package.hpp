@@ -29,21 +29,21 @@ namespace kikimora{
         private:
             string src_pkg_path;
             string dst_pkg_path;
-            string diff_spec_path;
+            string file_list;
         public:
             ConfPackage(
                  const char *src_pkg_path, \
                  const char *dst_pkg_path, \
-                 const char *diff_spec_path);
+                 const char *file_list);
             int ScanSrcFiles(vector<string> *src_files);
     };
     ConfPackage::ConfPackage(
             const char *src_pkg_path, \
             const char *dst_pkg_path, \
-            const char *diff_spec_path){
+            const char *file_list){
         this->src_pkg_path = src_pkg_path;
         this->dst_pkg_path = dst_pkg_path;
-        this->diff_spec_path = diff_spec_path;
+        this->file_list = file_list;
     }
 
     int ConfPackage::ScanSrcFiles(vector<string> *src_files){

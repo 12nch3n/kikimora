@@ -249,12 +249,11 @@ sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
 sysconfdir = ${prefix}/etc
-target_alias = 
+target_alias =
 top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
 AUTOMAKE_OPTIONS = foreign
-kikimora_LDADD = -ljsoncpp
 kikimora_SOURCES = kikimora.cpp \
 				 lib/json/jsoncpp.cpp \
 				 lib/docopt/docopt.cpp
