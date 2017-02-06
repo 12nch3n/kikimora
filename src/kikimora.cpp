@@ -20,13 +20,13 @@ R"(Kikmora commands:
     [diff merge]     Merge the all configure diff records before the specified release,
                      feature & stage diffs would not be merged.
 
-    [conf generate]  Generate the configuration files migrated with the specified configure diff.
+    [conf aggregate] Generate the configuration files aggregated with the specified configure diff.
                      The conf diffs would be patched to conf file with order: <release>, <feature>, <stage>.
                      The conf diffs in the same tag would be patched as line number ascends.
 
     Usage:
       kikimora diff merge <release> [--diff=<df>]
-      kikimora conf generate <release> <feature> <stage> [--diff=<df>]
+      kikimora conf aggregate <release> <feature> <stage> [--diff=<df>]
 
     Options:
       -h --help     Show this screen.

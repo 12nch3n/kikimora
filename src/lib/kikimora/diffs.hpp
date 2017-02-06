@@ -185,7 +185,8 @@ namespace kikimora{
         const Version* crn_ver = NewVersion(release_ver);
         //vector<Diff*>::iterator diff;
         for(auto diff=this->diff_rcds.begin(); diff!=this->diff_rcds.end(); diff++){
-            if ( 0 == strcmp((*diff)->category, "common") ){
+            if ( 0 == strcmp((*diff)->category, "common") && \
+                    0 == strcmp((*diff)->version->FEATURE, "") ){
                 if ( crn_ver->Weight() > (*diff)->version->Weight()){
                     memcpy((*diff)->version, crn_ver, sizeof(Version));
                     strcpy((*diff)->tag, crn_ver->Str().c_str());
@@ -358,7 +359,7 @@ namespace kikimora{
         }
         sort(uniqed_diffs.begin(), \
                 uniqed_diffs.end(), \
-                [](Diff* const& a, Diff* const& b){ \
+                [](Diff* const& a, Diff* const& b) { \
                     return a->Weight() < b->Weight(); \
                 } );
         diffs.PrintRcds(uniqed_diffs);
