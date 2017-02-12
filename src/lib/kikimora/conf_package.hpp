@@ -89,8 +89,10 @@ namespace kikimora{
     }
 
     template<typename CONF_TYPE>
-        int PatchDiffs(const CONF_TYPE* conf_file, vector<Diff*> diffs){
+        int PatchDiffs(CONF_TYPE* conf_file, vector<Diff*> diffs){
             for(auto it = diffs.begin();it!=diffs.end();it++){
+                KK_LOG(KK_NOTICE, \
+                       "Patch Diff Line: %d.\n", (*it)->rcd_no);
                 switch ((*it)->operation){
                     case OpType::ACHIEVE: {
                         cout<<"Conf file archive would supported in the further version."<<endl;
@@ -114,31 +116,39 @@ namespace kikimora{
         }
 
     template<typename CONF_TYPE>
-        int SaveTofile(const CONF_TYPE* conf_file, const char* save_to_dest){
+        int SaveToFile(CONF_TYPE* conf_file, const char* save_to_dest){
             return conf_file->save(save_to_dest);
         }
 
     int ConfPackage::ProcessFiles(map< uint32_t, vector<Diff*> > file_diffs){
         for (auto conf_it = file_diffs.begin(); conf_it != file_diffs.end(); conf_it++){
             char buffer[2*1024];
-            sprintf(buffer, "%s/%s", this->src_pkg_path.c_str(),  (*(conf_it->second.begin()))->conf_file);
             char real_buf[2*1024];
+            sprintf(buffer, "%s/%s", this->src_pkg_path.c_str(),  (*(conf_it->second.begin()))->conf_file);
             if ( NULL == realpath(buffer, real_buf) ){
                 KK_LOG(KK_ERROR, \
                         "Could not locate conf_file: %s.\n",
                         buffer);
+                exit(-1);
             }
+            string src_conf(real_buf);
             hash<string> hash_fn;
             string conf_type = this->file_list.end() != this->file_list.find(hash_fn(string(real_buf))) ? \
                                this->file_list[hash_fn(string(real_buf))] : \
                                "XML";
-            uint32_t JSON_HASH = hash_fn("JSON");
-            cout << JSON_HASH << endl;
-            //switch(hash_fn(conf_type)) {
-            //    case JSON_HASH: {
-            //        break;}
-            //    default: break;
-            //}
+            sprintf(buffer, "%s/%s", this->src_pkg_path.c_str(),  (*(conf_it->second.begin()))->conf_file);
+            realpath(buffer, real_buf);
+            string dest_conf = string(real_buf);
+            if ( "JSON" == conf_type ) {
+                ifstream in(src_conf, ios::in);
+                istreambuf_iterator<char> beg(in), end;
+                string content(beg, end);
+                in.close();
+                cout << content << endl;
+                KmrJsonConf conf(content.c_str());
+                PatchDiffs<KmrJsonConf>(&conf, conf_it->second);
+                SaveToFile<KmrJsonConf>(&conf, dest_conf.c_str());
+            }
         }
         return 0;
     }

@@ -43,9 +43,12 @@ namespace kikimora {
         Json::Reader reader;
         bool parsingSuccessful = reader.parse(content, ret);
         if (!parsingSuccessful) {
+
+        }
+        if (!parsingSuccessful) {
             KK_LOG(KK_ERROR, \
-                    "Could not parser the content from string to json: %s\n", \
-                    reader.getFormattedErrorMessages().c_str());
+                    "Could not parser the content from string to json: %s, %s. \n", \
+                    reader.getFormattedErrorMessages().c_str(), content);
             exit(1);
         }
         return ret;

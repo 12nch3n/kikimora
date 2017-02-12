@@ -1,10 +1,10 @@
 <6.10>
-ADD	ads.conf	server.info.id	test
+ADD	ads.conf	server.info.id	1000
 UPDATE	ads.conf	server.info.group	test
 DELETE  ads.conf	server.info.domain
 
 <6.11>
-ADD	ads.conf	server.info.id1	test
+ADD	ads.conf	server.info.id1	"test"
 UPDATE	ads.conf	server.info.group	test
 DELETE  ads.conf	server.info.domain
 
@@ -15,7 +15,7 @@ DELETE  ads.conf	server.info.domain3
 
 <6.12>
 ADD	ads.conf	server.info.id	test
-UPDATE	ads.conf	server.info.group	test
+UPDATE	ads.conf	server.info.group	"test"
 DELETE  ads.conf	server.info.domain
 
 <6.11.0-featrue2>
@@ -39,9 +39,8 @@ UPDATE	ads.conf	server.info.group	test
 DELETE  ads.conf	server.info.domain
 
 [staging]
-ADD	ads.conf	server.info.id	test
-UPDATE	ads.conf	server.info.group[1]	test
-DELETE  ads.conf	server[10].info.domain
+ADD	ads.conf	server.info.id	"test"
+UPDATE	ads.conf	server.info.group[1]	"test"
 
 [production]
 ADD	ads.conf	server.info.id	test
