@@ -323,6 +323,15 @@ namespace kikimora{
         return ret;
     }
 
+    map< uint32_t, vector<Diff*> > ArchieveDiffs(const char* diff_file, \
+            const char* release, \
+            const char* catagory, \
+            const char* feature = ""){
+        Diffs diffs(diff_file);
+        vector<Diff*> picked_diffs = diffs.PickDiffs4Cate(release, catagory, feature);
+        return GroupByFile( UniqByDiffPoint(picked_diffs));
+    }
+
     map< uint32_t, vector<Diff*> > GroupByTag(vector<Diff*> diffs){
         map< uint32_t, vector<Diff*> > ret;
         hash<string> hash_fn;
