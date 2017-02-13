@@ -43,14 +43,12 @@ namespace kikimora {
         Json::Reader reader;
         bool parsingSuccessful = reader.parse(content, ret);
         if (!parsingSuccessful) {
-
-        }
-        if (!parsingSuccessful) {
             KK_LOG(KK_ERROR, \
                     "Could not parser the content from string to json: %s, %s. \n", \
                     reader.getFormattedErrorMessages().c_str(), content);
             exit(1);
         }
+        cout << ret << endl;
         return ret;
     }
 
@@ -78,7 +76,7 @@ namespace kikimora {
             KK_LOG(KK_ERROR, \
                    "Upsert node %s got exception: %s.\n", \
                    node_path, e.what());
-
+            exit(1);
         }
         return 0;
     }
@@ -132,6 +130,9 @@ namespace kikimora {
         Json::StyledWriter styled_writer;
         string dumped_json = styled_writer.write(this->root);
         cout << dumped_json << endl;
+        ofstream out(file_path);
+        out << dumped_json;
+        out.close();
         return 0;
     }
 } // end of namespace kikimora

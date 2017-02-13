@@ -24,6 +24,9 @@
 #include <fstream>
 #include <kikimora/diffs.hpp>
 #include <kikimora/json_conf.hpp>
+#include <libgen.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 namespace kikimora{
     vector<string> SUPPORTED_TYPES = {"JSON", "XML", "YAML", "INI"};
@@ -117,6 +120,8 @@ namespace kikimora{
 
     template<typename CONF_TYPE>
         int SaveToFile(CONF_TYPE* conf_file, const char* save_to_dest){
+            char* bname = dirname((char *)save_to_dest);
+            mkdir(bname, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH);
             return conf_file->save(save_to_dest);
         }
 
@@ -136,15 +141,13 @@ namespace kikimora{
             string conf_type = this->file_list.end() != this->file_list.find(hash_fn(string(real_buf))) ? \
                                this->file_list[hash_fn(string(real_buf))] : \
                                "XML";
-            sprintf(buffer, "%s/%s", this->src_pkg_path.c_str(),  (*(conf_it->second.begin()))->conf_file);
-            realpath(buffer, real_buf);
-            string dest_conf = string(real_buf);
+            sprintf(buffer, "%s/%s", this->dst_pkg_path.c_str(),  (*(conf_it->second.begin()))->conf_file);
+            string dest_conf = string(buffer);
             if ( "JSON" == conf_type ) {
                 ifstream in(src_conf, ios::in);
                 istreambuf_iterator<char> beg(in), end;
                 string content(beg, end);
                 in.close();
-                cout << content << endl;
                 KmrJsonConf conf(content.c_str());
                 PatchDiffs<KmrJsonConf>(&conf, conf_it->second);
                 SaveToFile<KmrJsonConf>(&conf, dest_conf.c_str());

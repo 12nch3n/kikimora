@@ -1,48 +1,45 @@
 <6.10>
 ADD	ads.conf	server.info.id	1000
-UPDATE	ads.conf	server.info.group	test
 DELETE  ads.conf	server.info.domain
 
 <6.11>
 ADD	ads.conf	server.info.id1	"test"
-UPDATE	ads.conf	server.info.group	test
+UPDATE	ads.conf	server.info.group	"test"
 DELETE  ads.conf	server.info.domain
 
 <6.10.0-featrue1>
-ADD	ads.conf	server.info.id2	test
-UPDATE	ads.conf	server.info.group2	test
+ADD	ads.conf	server.info.id2	"test"
+UPDATE	ads.conf	server.info.group2	"test"
 DELETE  ads.conf	server.info.domain3
 
 <6.12>
-ADD	ads.conf	server.info.id	test
+ADD	ads.conf	server.info.id	"test"
 UPDATE	ads.conf	server.info.group	"test"
 DELETE  ads.conf	server.info.domain
 
 <6.11.0-featrue2>
-ADD	ads.conf	server.info.id2	test
-UPDATE	ads.conf	server.info.group2	test
+ADD	ads.conf	server.info.id2	"test"
+UPDATE	ads.conf	server.info.group2	"test"
 DELETE  ads.conf	server.info.domain3
 
 [regression]
-ADD	ads.conf	server.info.id	test
-UPDATE	ads.conf	server.info.group	test
+ADD	ads.conf	server.info.id	"test"
+UPDATE	ads.conf	server.info.group	"test"
 DELETE  ads.conf	server.info.domain
 
 [integration]
-ADD	ads.conf	server.info.id	test
-UPDATE	ads.conf	server.info.group	test
+ADD	ads.conf	server.info.id	"test"
+UPDATE	ads.conf	server.info.group	"test"
 DELETE  ads.conf	server.info.domain
 
 [performance]
-ADD	ads.conf	server.info.id	test
-UPDATE	ads.conf	server.info.group	test
+ADD	ads.conf	server.info.id	"test"
+UPDATE	ads.conf	server.info.group	"test"
 DELETE  ads.conf	server.info.domain
 
 [staging]
 ADD	ads.conf	server.info.id	"test"
-UPDATE	ads.conf	server.info.group[1]	"test"
 
 [production]
-ADD	ads.conf	server.info.id	test
-UPDATE	ads.conf	server.info.group[0]	test
+ADD	ads.conf	server.info.id	"test"
 DELETE  ads.conf	server.info.domain
