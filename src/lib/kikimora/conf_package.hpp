@@ -24,6 +24,7 @@
 #include <fstream>
 #include <kikimora/diffs.hpp>
 #include <kikimora/json_conf.hpp>
+#include <kikimora/xml_conf.hpp>
 #include <libgen.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -151,6 +152,14 @@ namespace kikimora{
                 KmrJsonConf conf(content.c_str());
                 PatchDiffs<KmrJsonConf>(&conf, conf_it->second);
                 SaveToFile<KmrJsonConf>(&conf, dest_conf.c_str());
+            } else if ( "XML" == conf_type ) {
+                ifstream in(src_conf, ios::in);
+                istreambuf_iterator<char> beg(in), end;
+                string content(beg, end);
+                in.close();
+                KmrXmlConf conf(content.c_str());
+                PatchDiffs<KmrXmlConf>(&conf, conf_it->second);
+                SaveToFile<KmrXmlConf>(&conf, dest_conf.c_str());
             }
         }
         return 0;
