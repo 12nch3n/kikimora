@@ -167,7 +167,7 @@ AM_DEFAULT_VERBOSITY = 1
 AUTOCONF = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing autoconf
 AUTOHEADER = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing autoheader
 AUTOMAKE = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing automake-1.15
-AWK = awk
+AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
@@ -249,11 +249,12 @@ sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
 sysconfdir = ${prefix}/etc
-target_alias =
+target_alias = 
 top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
 AUTOMAKE_OPTIONS = foreign
+kikimora_LDADD = -ljsoncpp -lxerces-c
 kikimora_SOURCES = kikimora.cpp \
 				 lib/json/jsoncpp.cpp \
 				 lib/docopt/docopt.cpp

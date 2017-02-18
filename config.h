@@ -4,8 +4,8 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
-/* Define to 1 if you have the `pthread' library (-lpthread). */
-/* #undef HAVE_LIBPTHREAD */
+/* Define to 1 if you have the `xerces-c' library (-lxerces-c). */
+/* #undef HAVE_LIBXERCES_C */
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1

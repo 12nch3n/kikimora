@@ -4413,13 +4413,13 @@ fi
 
 # Checks for libraries.
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for  in -lpthread" >&5
-$as_echo_n "checking for  in -lpthread... " >&6; }
-if ${ac_cv_lib_pthread_+:} false; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for  in -lxerces-c" >&5
+$as_echo_n "checking for  in -lxerces-c... " >&6; }
+if ${ac_cv_lib_xerces_c_+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpthread  $LIBS"
+LIBS="-lxerces-c  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4439,22 +4439,22 @@ return  ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_pthread_=yes
+  ac_cv_lib_xerces_c_=yes
 else
-  ac_cv_lib_pthread_=no
+  ac_cv_lib_xerces_c_=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_pthread_" >&5
-$as_echo "$ac_cv_lib_pthread_" >&6; }
-if test "x$ac_cv_lib_pthread_" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_xerces_c_" >&5
+$as_echo "$ac_cv_lib_xerces_c_" >&6; }
+if test "x$ac_cv_lib_xerces_c_" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBPTHREAD 1
+#define HAVE_LIBXERCES_C 1
 _ACEOF
 
-  LIBS="-lpthread $LIBS"
+  LIBS="-lxerces-c $LIBS"
 
 fi
 

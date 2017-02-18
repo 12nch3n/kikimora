@@ -254,7 +254,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
-kikimora_LDADD = -ljsoncpp
+kikimora_LDADD = -ljsoncpp -lxerces-c
 kikimora_SOURCES = kikimora.cpp \
 				 lib/json/jsoncpp.cpp \
 				 lib/docopt/docopt.cpp

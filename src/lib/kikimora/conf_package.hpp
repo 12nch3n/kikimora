@@ -144,19 +144,15 @@ namespace kikimora{
                                "XML";
             sprintf(buffer, "%s/%s", this->dst_pkg_path.c_str(),  (*(conf_it->second.begin()))->conf_file);
             string dest_conf = string(buffer);
+            ifstream in(src_conf, ios::in);
+            istreambuf_iterator<char> beg(in), end;
+            string content(beg, end);
+            in.close();
             if ( "JSON" == conf_type ) {
-                ifstream in(src_conf, ios::in);
-                istreambuf_iterator<char> beg(in), end;
-                string content(beg, end);
-                in.close();
                 KmrJsonConf conf(content.c_str());
                 PatchDiffs<KmrJsonConf>(&conf, conf_it->second);
                 SaveToFile<KmrJsonConf>(&conf, dest_conf.c_str());
             } else if ( "XML" == conf_type ) {
-                ifstream in(src_conf, ios::in);
-                istreambuf_iterator<char> beg(in), end;
-                string content(beg, end);
-                in.close();
                 KmrXmlConf conf(content.c_str());
                 PatchDiffs<KmrXmlConf>(&conf, conf_it->second);
                 SaveToFile<KmrXmlConf>(&conf, dest_conf.c_str());

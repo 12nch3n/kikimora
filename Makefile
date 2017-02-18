@@ -157,7 +157,7 @@ CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
 	$(top_srcdir)/tmp/compile $(top_srcdir)/tmp/install-sh \
-	$(top_srcdir)/tmp/missing tmp/compile tmp/depcomp \
+	$(top_srcdir)/tmp/missing README tmp/compile tmp/depcomp \
 	tmp/install-sh tmp/missing
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
@@ -207,7 +207,7 @@ AM_DEFAULT_VERBOSITY = 1
 AUTOCONF = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing autoconf
 AUTOHEADER = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing autoheader
 AUTOMAKE = ${SHELL} /Users/yinchen/Projects/kikimora/tmp/missing automake-1.15
-AWK = awk
+AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
