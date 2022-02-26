@@ -1,4 +1,4 @@
-#KIKIMORA
+# KIKIMORA
 
 kikimora (кики́мора: a house spirit in Eastern mythology) is a tool to manage your application configuration changes by version, featrue & catagory.
 
@@ -27,7 +27,7 @@ Kikmora commands:
 ```
 
 
-##SUPPORT FILE TYPE
+## SUPPORT FILE TYPE
 |*type*| *status*|
 |------|---------|
 | JSON | Support |
@@ -35,28 +35,28 @@ Kikmora commands:
 | YAML |  Planed |
 | INI  |  Planed |
 
-##DIFF SPECIFICATIONS
+## DIFF SPECIFICATIONS
 We support server operations on a exactly diff point:
-###ADD
+### ADD
 ```ADD ${conf_file} ${diff_node} ${node_content}```
 It means add ${node\_content} into ${diff\_node} for ${conf\_file}.
 ${diff\_node} is path of the node.
 
-###UPDATE
+### UPDATE
 ```UPDATE ${conf_file} ${diff_node} ${node_content}```
 It means update ${node\_content} into ${diff\_node} for ${conf\_file}.
 ${diff\_node} is path of the node.
 
-###REPLACE
+### REPLACE
 ```REPLACE ${conf_file} ${pattern} ${content}```
 It means replace the ${pattern} with ${content} for ${conf\_file}.
 
-###DELETE
+### DELETE
 ```DELETE ${conf_file} ${diff_node} ```
 It means delete ${diff\_node} for ${conf\_file}.
 ${diff\_node} is path of the node.
 
-##DIFFS MERGE
+## DIFFS MERGE
 Before your diff file patched into the configurations. They would be sorted and merged, the same diff point would be combined and the latest change would be kept.
 The Mergeration would follow this rules: **\<version\> + \<feature\> + {catagory}**
 
